@@ -6,8 +6,8 @@ https://www.tensorflow.org/datasets/catalog/tf_flowers?hl=ko
 설명이 조금 불친절하다
 총 3,670개의 데이터 
 
-라벨은 총 5개
-0 (dandelion) - 민들레?   
+라벨은 총 5개   
+0 (dandelion) - 민들레?     
 1 (daisy) - 데이지    
 2 (tulips) - 튤립   
 3 (sunflowers) - 해바라기   

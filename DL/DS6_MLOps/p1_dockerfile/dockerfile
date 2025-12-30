@@ -1,0 +1,25 @@
+# 1. 가벼운 Python 3.9 슬림 버전 사용 (기초 체중 감량)
+FROM python:3.9-slim
+
+# 2. 컨테이너 내부 작업 디렉토리 설정
+WORKDIR /app
+
+# 3. 필수 도구 설치 (가끔 transformers 설치 시 필요한 라이브러리들)
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    && rm -rf /var/lib/apt/lists/*
+
+# 4. 라이브러리 설치 (캐시를 남기지 않아 용량 절감)
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# 5. 소스 코드 복사
+COPY main.py .
+
+# 6. 중요: 빌드 시점에 모델을 미리 다운로드 (GCP 실행 시 속도 향상)
+# 아래 명령은 이미지 빌드 중에 모델을 미리 받아둡니다.
+RUN python -c "from transformers import pipeline; pipeline('question-answering')"
+
+# 7. 포트 개방 및 실행
+EXPOSE 8000
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
